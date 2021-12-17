@@ -41,7 +41,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<IMovieRepository, MovieRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 
-builder.Services.AddSingleton<IPasswordProvider, PasswordProvider>();
+builder.Services.AddSingleton<IPasswordProvider, SHA256WithoutSaltPasswordProvider>();
 
 builder.Services.AddTransient<IMovieService, MovieService>();
 builder.Services.AddTransient<IUserService, UserService>();

@@ -4,7 +4,7 @@
     using System.Security.Cryptography;
     using System.Text;
 
-    public class PasswordProvider : IPasswordProvider
+    public class SHA256WithoutSaltPasswordProvider : IPasswordProvider
     {
         public string HashPassword(string plainTextPassword)
         {
