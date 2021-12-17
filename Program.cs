@@ -12,6 +12,8 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
+using RESTJwt.Providers;
+using RESTJwt.Providers.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,8 @@ builder.Services.AddEndpointsApiExplorer();
 // Register repositories in the dependency injection container
 builder.Services.AddTransient<IMovieRepository, MovieRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+builder.Services.AddSingleton<IPasswordProvider, PasswordProvider>();
 
 builder.Services.AddTransient<IMovieService, MovieService>();
 builder.Services.AddTransient<IUserService, UserService>();

@@ -3,13 +3,16 @@
     using RESTJwt.Data.Contracts;
     using RESTJwt.Models;
     using RESTJwt.Models.DTOs;
+    using RESTJwt.Providers.Contracts;
     using RESTJwt.Services.Contracts;
     public class UserService : IUserService
     {
         private IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private IPasswordProvider _passwordProvider;
+        public UserService(IUserRepository userRepository, IPasswordProvider passwordProvider)
         {
             this._userRepository = userRepository;
+            this._passwordProvider = passwordProvider;
         }
 
         public IEnumerable<string> DoesUserExists(UserRegisterDTO userRegstierDTO)
@@ -47,10 +50,12 @@
 
         public User Create(UserRegisterDTO userRegstierDTO)
         {
+            string hashedPassword = this._passwordProvider.HashPassword(userRegstierDTO.Password);
+
             User newUser = new()
             {
                 Username = userRegstierDTO.Username,
-                Password = userRegstierDTO.Password,
+                Password = hashedPassword,
                 FirstName = userRegstierDTO.FirstName,
                 LastName = userRegstierDTO.LastName,
                 EmailAddress = userRegstierDTO.EmailAddress,
@@ -62,7 +67,9 @@
 
         public User Get(UserLoginDTO userLoginDTO)
         {
-            return this._userRepository.FirstOrDefault(x => x.Username == userLoginDTO.Username && x.Password == userLoginDTO.Password);
+            string hashedPassword = this._passwordProvider.HashPassword(userLoginDTO.Password);
+
+            return this._userRepository.FirstOrDefault(x => x.Username == userLoginDTO.Username && x.Password == hashedPassword);
         }
 
         public string ChangeRole(string username)
